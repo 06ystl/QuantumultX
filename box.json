@@ -1,0 +1,156 @@
+{
+  "id": "wave.app.sub",
+  "name": "wave 脚本订阅",
+  "author": "@wave",
+  "icon": "https://avatars0.githubusercontent.com/u/9592236",
+  "repo": "https://github.com/06ystl/QuantumultX",
+  "apps": [
+    {
+      "id": "id77_ql",
+      "name": "wave青龙上传设置任务",
+      "keys": [
+        "id77_ql_flag",
+        "id77_ql_addrs",
+        "id77_ql_port",
+        "id77_ql_clientId",
+        "id77_ql_clientSecret",
+        "id77_ql_fileName",
+        "id77_ql_schedule",
+        "id77_ql_taskName",
+        "id77_deviceName"
+      ],
+      "settings": [
+        {
+          "id": "id77_ql_flag",
+          "name": "启用",
+          "val": false,
+          "type": "boolean",
+          "desc": "使用BoxJS数据"
+        },
+        {
+          "id": "id77_ql_fileName",
+          "name": "本地文件名",
+          "val": "",
+          "type": "text",
+          "placeholder": "QX取iCloud的Scripts文件夹文件，NodeJS取运行同级路径下的文件"
+        },
+        {
+          "id": "id77_ql_schedule",
+          "name": "任务定时",
+          "val": "",
+          "type": "text",
+          "placeholder": "cron 格式"
+        },
+        {
+          "id": "id77_ql_taskName",
+          "name": "任务名",
+          "val": "",
+          "type": "text"
+        },
+        {
+          "id": "id77_ql_addrs",
+          "name": "青龙域名或IP(固定)",
+          "val": "",
+          "type": "textarea",
+          "autoGrow": true,
+          "rows": 2,
+          "placeholder": "192.168.2.1@192.168.2.2"
+        },
+        {
+          "id": "id77_ql_addrs_other",
+          "name": "青龙域名或IP(预留)",
+          "val": "",
+          "type": "textarea",
+          "autoGrow": true,
+          "rows": 2,
+          "placeholder": "192.168.2.1@192.168.2.2"
+        },
+        {
+          "id": "id77_ql_port",
+          "name": "青龙端口",
+          "val": "",
+          "type": "number"
+        },
+        {
+          "id": "id77_ql_clientId",
+          "name": "青龙 Client Id",
+          "val": "",
+          "type": "text"
+        },
+        {
+          "id": "id77_ql_clientSecret",
+          "name": "青龙 Client Secret",
+          "val": "",
+          "type": "text"
+        },
+        {
+          "id": "id77_deviceName",
+          "name": "设备名称",
+          "val": "",
+          "type": "text"
+        },
+        {
+          "id": "wave_ql_seg_flag",
+          "name": "启用",
+          "val": false,
+          "type": "boolean",
+          "desc": "将数据平均切分"
+        },
+        {
+          "id": "wave_ql_seg_num",
+          "name": "切分数量",
+          "val": "1",
+          "type": "text"
+        },
+        {
+          "id": "wave_ql_alloc_ql_per_seg",
+          "name": "每份分配ip数量",
+          "val": "1",
+          "type": "text"
+        }
+      ],
+      "author": "@wave",
+      "scripts": [
+        {
+          "name": "合并抓包数据至iCloud☁️",
+          "script": "https://raw.githubusercontent.com/id77/QuantumultX/master/task/integrateDataToICloudFile.js"
+        },
+        {
+          "name": "iCloud数据写入任务☁️📁",
+          "script": "https://raw.githubusercontent.com/id77/QuantumultX/master/task/iCloudDataToTaskFile.js"
+        },
+        {
+          "name": "本机数据写入任务📁",
+          "script": "https://raw.githubusercontent.com/id77/QuantumultX/master/task/dataToTaskFile.js"
+        },
+        {
+          "name": "上传文件设置任务🐉_wave",
+          "script": "https://raw.githubusercontent.com/06ystl/QuantumultX/master/task/ql_task.js"
+        },
+        {
+          "name": "删除任务🐉",
+          "script": "https://raw.githubusercontent.com/id77/QuantumultX/master/task/ql_delTask.js"
+        },
+        {
+          "name": "清理任务文件的数据📁",
+          "script": "https://raw.githubusercontent.com/id77/QuantumultX/master/task/clearTaskFileData.js"
+        },
+        {
+          "name": "清除本机数据🔴",
+          "script": "https://raw.githubusercontent.com/id77/QuantumultX/master/task/delMitmData.js"
+        },
+        {
+          "name": "清除iCloud数据🔴☁️",
+          "script": "https://raw.githubusercontent.com/id77/QuantumultX/master/task/delICloudData.js"
+        }
+      ],
+      "descs_html": [
+        "☁️<a target=\"_blank\" href=\"shareddocuments://\">前往iCloud</a>"
+      ],
+      "icons": [
+        "https://raw.githubusercontent.com/id77/QuantumultX/master/icon/sim.png",
+        "https://raw.githubusercontent.com/id77/QuantumultX/master/icon/sim.png"
+      ]
+    }
+  ]
+}
