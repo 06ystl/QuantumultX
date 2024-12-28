@@ -21,6 +21,8 @@ let seg_num = '1'; //将reqArr平均分成 n 份
 let alloc_ql_per_seg = '1';
 
 const needBoxJS = $.getData('id77_ql_flag');
+const needSeg = $.getData('wave_ql_seg_flag');
+
 if (needBoxJS === 'true') {
   qlAddrs = $.getData('id77_ql_addrs')?.split('@') ?? []; // 青龙面板地址
   port = $.getData('id77_ql_port'); // 青龙端口
@@ -30,7 +32,6 @@ if (needBoxJS === 'true') {
   schedule = $.getData('id77_ql_schedule'); // 定时时间
   taskName = $.getData('id77_ql_taskName'); // 定时任务名称
 
-  const needSeg = $.getData('wave_ql_seg_flag');
   if(needSeg) {
     seg_num =  $.getData('wave_ql_seg_num');
     alloc_ql_per_seg =  $.getData('wave_ql_alloc_ql_per_seg');
@@ -156,7 +157,7 @@ class Qinglong {
   .finally(() => $.done());
 
 async function task() {
-  const fileContent = await $.readFile();
+  let fileContent = await $.readFile();
   if (!fileContent) {
     console.log(
       `[*] 读取文件失败，请检查是否存在 ${fileName} 该文件，再执行此脚本！`
@@ -175,25 +176,29 @@ async function task() {
       );
       return;
     }
-    // 移除所有单行注释（//开头的部分）和多行注释（/* */）
-    fileContent = fileContent.replace(/\/\/.*$/gm, ''); // 移除单行注释
-    fileContent = fileContent.replace(/\/\*[\s\S]*?\*\//g, ''); // 移除多行注释
 
     // 正则表达式提取reqArr数组内容
     const regex = /let reqArr = \[(.*?)\];/s;  // 匹配 let reqArr = [ ... ]; 中的内容
     const match = fileContent.match(regex);
 
     if (match) {
-      // match[1] 是数组的内容部分
-      const reqArrStr = match[1].trim();
+      
       // 使用 split 方法将每个元素分割并处理去除引号
-      const reqArr = reqArrStr.split(',').map(item => item.trim().replace(/['"]+/g, ''));
+      // const reqArr = reqArrStr.split(',').map(item => item.trim().replace(/['"]+/g, ''));
+      let reqArr; 
+
+      try {
+        reqArr = eval('[' + match[1] + ']');
+      } catch(error){
+        console.log('解析reqArr内容出错');
+        return;
+      }
 
       const splitArr = splitArrayIntoNParts(reqArr, seg_num);
       const splitQl = splitArrayIntoNParts(qlAddrs, seg_num);
 
       for(let index in splitArr) {
-        const updatedReqArr = `let reqArr = [${splitArr[index].map(item => `'${item}'`).join(',\n')}];`;
+        const updatedReqArr = `let reqArr = [\n${splitArr[index].map(item => `${JSON.stringify(item)}`).join(',\n')}\n];`;
         const updatedData = fileContent.replace(regex, updatedReqArr);
         for(const qlAddr of splitQl[index]) {
           console.log(`[*] 正在操作 /${qlAddr}/ = = = = >`);
@@ -206,22 +211,9 @@ async function task() {
           } catch (error) {
             console.log(error);
           }
-          console.log(`[*] 操作结束 /${qlAddr}  第${index}组数据/ < = = = =\n`);
+          console.log(`[*] 操作结束 /${qlAddr}  第${Number(index) + 1}组数据/ < = = = =\n`);
         }
       }
-
-      // 输出 n 个不同的 JS 文件内容
-      splitArr.forEach((part, index) => {
-        const updatedReqArr = `let reqArr = [${part.map(item => `'${item}'`).join(', ')}];`;
-        
-        // 生成新的 JS 文件内容
-        const updatedData = data.replace(regex, updatedReqArr);
-
-        // 输出每个分组的 JavaScript 文件字符串
-        console.log(`File ${index + 1} content:\n`);
-        console.log(updatedData);
-        console.log('\n' + '='.repeat(40) + '\n');
-      });
     }
   } else {
     for (const qlAddr of qlAddrs) {
