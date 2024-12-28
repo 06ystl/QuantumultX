@@ -17,7 +17,10 @@
         "id77_ql_fileName",
         "id77_ql_schedule",
         "id77_ql_taskName",
-        "id77_deviceName"
+        "id77_deviceName",
+        "wave_ql_seg_flag",
+        "wave_ql_seg_num",
+        "wave_ql_alloc_ql_per_seg"
       ],
       "settings": [
         {
