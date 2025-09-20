@@ -232,14 +232,24 @@ async function task() {
   }
   
 }
+
 function splitArrayIntoNParts(arr, n) {
-  let result = [];
-  let partSize = Math.ceil(arr.length / n);  // 计算每份的大小，使用向上取整避免遗漏数据
-
+  const result = [];
+  const length = arr.length;
+  
+  // 计算基本大小和余数
+  const baseSize = Math.floor(length / n);
+  const remainder = length % n;
+  
+  let start = 0;
+  
   for (let i = 0; i < n; i++) {
-    result.push(arr.slice(i * partSize, (i + 1) * partSize));
+    // 前remainder份每份多一个元素
+    const end = start + baseSize + (i < remainder ? 1 : 0);
+    result.push(arr.slice(start, end));
+    start = end;
   }
-
+  
   return result;
 }
 
