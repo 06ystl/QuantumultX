@@ -213,7 +213,7 @@ async function task() {
           } catch (error) {
             console.log(error);
           }
-          console.log(`[*] 操作结束 /${qlAddr}  第${Number(index) + 1}组数据/ < = = = =\n`);
+          console.log(`[*] 操作结束: http://${qlAddr}:${port}  第${Number(index) + 1}组数据 数量:${splitArr[index].length}/ < = = = =\n`);
         }
       }
     }
