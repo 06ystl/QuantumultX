@@ -11,6 +11,7 @@ const $ = new Env('上传文件设置任务🐉 wave');
 
 let qlAddrs = ['192.168.1.1']; // 青龙面板地址
 let port = '5700'; // 青龙端口
+let baseUrl = ''; // 青龙基础URL
 let clientId = '';
 let clientSecret = '';
 let fileName = 'test.js'; // 上传脚本名称
@@ -26,6 +27,7 @@ const needSeg = $.getData('wave_ql_seg_flag');
 if (needBoxJS === 'true') {
   qlAddrs = $.getData('id77_ql_addrs')?.split('@') ?? []; // 青龙面板地址
   port = $.getData('id77_ql_port'); // 青龙端口
+  baseUrl = $.getData('id77_ql_baseUrl')?.replace(/\/$/, ''); // 青龙基础URL
   clientId = $.getData('id77_ql_clientId');
   clientSecret = $.getData('id77_ql_clientSecret');
   fileName = $.getData('id77_ql_fileName'); // 上传脚本名称
@@ -55,7 +57,7 @@ class Qinglong {
 
   init() {
     return new Promise((resolve, reject) => {
-      const url = `${this.qlAddr}:${port}/open/auth/token?client_id=${this.clientId}&client_secret=${this.clientSecret}`;
+      const url = `${this.qlAddr}:${port}${baseUrl}/open/auth/token?client_id=${this.clientId}&client_secret=${this.clientSecret}`;
 
       $.get({ url, timeout: 2000 }, (err, resp, data) => {
         if (resp?.statusCode === 200) {
@@ -85,11 +87,11 @@ class Qinglong {
 
   upload(fileContent) {
     return new Promise((resolve, reject) => {
-      const url = `${this.qlAddr}:${port}/open/scripts`;
+      const url = `${this.qlAddr}:${port}${baseUrl}/open/scripts`;
       const body = JSON.stringify({
         filename: fileName,
         content: fileContent,
-        path: '/',
+        path: '',
       });
 
       $.post(
@@ -118,7 +120,7 @@ class Qinglong {
 
   setCron(name, command, schedule) {
     return new Promise((resolve, reject) => {
-      const url = `${this.qlAddr}:${port}/open/crons`;
+      const url = `${this.qlAddr}:${port}${baseUrl}/open/crons`;
       const body = JSON.stringify({
         name: name,
         command: command,
